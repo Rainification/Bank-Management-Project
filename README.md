@@ -1,4 +1,4 @@
-# Bank Management System 🏦
+# Bank Management System 
 
 A lightweight, command-line banking application built with Python and MySQL. This project was developed as Computer Science submission, demonstrating database integration, CRUD operations, and error handling.
 
