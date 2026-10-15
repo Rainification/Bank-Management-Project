@@ -1,6 +1,6 @@
 import mysql.connector as c
 import time
-import sys
+
 db=c.connect(host='localhost',user='root',password='password')
 obj=db.cursor()
 obj.execute("CREATE DATABASE IF NOT EXISTS bank_management")
@@ -25,26 +25,34 @@ def create():
 def balance():
     print("\n--- Login To View YOur Balance ---")
     login_acc = int(input("Enter Account Number: "))
-    login_pas = input("Enter Password: ")
-    com = "SELECT acc_name, balance FROM accounts WHERE acc_no = {} AND password = '{}'".format(login_acc, login_pas)
     try:
+        obj.execute("SELECT * FROM accounts WHERE acc_no = {}".format(login_acc))
+        if obj.fetchone() == None:
+            print("\nInvalid Account Number.")
+            return
+        login_pas = input("Enter Password: ")
+        com = "SELECT acc_name, balance FROM accounts WHERE acc_no = {} AND password = '{}'".format(login_acc, login_pas)
         obj.execute(com)
         record = obj.fetchone() 
         if record != None:
             print("\nWelcome, {}!".format(record[0]))
             print("Your current balance is: ₹{}".format(record[1]))
         else:
-            print("\nInvalid Account Number or Password.")
+            print("\nInvalid Password.")
     except Exception:
         print("Could not fetch Your Balance")
 
 def deposit():
     print("\n--- DEPOSIT ---")
     login_acc = int(input("Enter Account Number: "))
-    login_pas = input("Enter Password: ")
-    amt = int(input("Enter amount to deposit: "))
-    query = "SELECT balance FROM accounts WHERE acc_no = {} AND password = '{}'".format(login_acc, login_pas)
     try:
+        obj.execute("SELECT * FROM accounts WHERE acc_no = {}".format(login_acc))
+        if obj.fetchone() == None:
+            print("\nInvalid Account Number.")
+            return
+        login_pas = input("Enter Password: ")
+        amt = int(input("Enter amount to deposit: "))
+        query = "SELECT balance FROM accounts WHERE acc_no = {} AND password = '{}'".format(login_acc, login_pas)
         obj.execute(query)
         record = obj.fetchone()
         if record != None:
@@ -53,17 +61,21 @@ def deposit():
             db.commit()
             print("\nSuccessfully deposited! New balance: ₹{}".format(record[0] + amt))
         else:
-            print("\nInvalid Account Number or Password.")
+            print("\nInvalid Password.")
     except Exception:
         print("Could not deposit Your Money")
 
 def withdraw():
     print("\n--- WITHDRAW ---")
     login_acc = int(input("Enter Account Number: "))
-    login_pas = input("Enter Password: ")
-    amt = int(input("Enter amount to withdraw: "))
-    query = "SELECT balance FROM accounts WHERE acc_no = {} AND password = '{}'".format(login_acc, login_pas)
     try:
+        obj.execute("SELECT * FROM accounts WHERE acc_no = {}".format(login_acc))
+        if obj.fetchone() == None:
+            print("\nInvalid Account Number.")
+            return
+        login_pas = input("Enter Password: ")
+        amt = int(input("Enter amount to withdraw: "))
+        query = "SELECT balance FROM accounts WHERE acc_no = {} AND password = '{}'".format(login_acc, login_pas)
         obj.execute(query)
         record = obj.fetchone()
         if record != None:
@@ -75,10 +87,21 @@ def withdraw():
             else:
                 print("\nInsufficient funds. Your balance is: ₹{}".format(record[0]))
         else:
-            print("\nInvalid Account Number or Password.")
+            print("\nInvalid Password.")
     except Exception:
         print("Could not withdraw Your Money")
 
+def view_all():
+    print("\n--- ALL ACCOUNTS ---")
+    obj.execute("select acc_name, acc_no, balance from accounts")
+    for i in obj:
+        print(i)
+
+def intro():
+    f=open("intro.txt","r")
+    data=f.read()
+    print(data)
+    f.close()
 
 while True:          
     print("\n=== BANK MANAGEMENT SYSTEM ===")
@@ -86,7 +109,9 @@ while True:
     print("2. View balance")
     print("3. Deposit")
     print("4. Withdraw")
-    print("5. Exit")
+    print("5. View all accounts")
+    print("6. Project Introduction")
+    print("7. Exit")
     choice=int(input('Enter Your Choice:'))
     if choice==1:
         create()
@@ -102,19 +127,18 @@ while True:
         withdraw()
 
     elif choice==5:
+        view_all()
+
+    elif choice==6:
+        intro()
+
+    elif choice==7:
         print('Thank You For Banking With Us! ')
         break
 
     elif choice==67:
-            obj.execute("select * from accounts")
-            for i in obj:
-                print(i)
+        obj.execute("select * from accounts")
+        for i in obj:
+            print(i)
     else:
         print('Invalid Choice! Please Try Again.')
-    
-sys.exit()
-
-
-
-
-
