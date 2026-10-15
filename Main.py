@@ -93,7 +93,7 @@ def withdraw():
 
 def view_all():
     print("\n--- ALL ACCOUNTS ---")
-    obj.execute("select acc_name, acc_no, balance from accounts")
+    obj.execute("select acc_name, acc_no from accounts")
     for i in obj:
         print(i)
 
