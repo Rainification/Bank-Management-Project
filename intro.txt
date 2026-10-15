@@ -1,0 +1,19 @@
+
+========================================
+        BANK MANAGEMENT SYSTEM          
+========================================
+Welcome to the Bank Management System!
+This project is designed using Python and MySQL
+to manage customer bank accounts smoothly.
+
+Key Features:
+- Create new bank accounts
+- Check account balance securely
+- Deposit and withdraw money
+- View all registered accounts
+
+Developed By:
+1. Ananthakrishnan Prasanth
+2. Adwaith VS
+3. Ghanashyam M
+========================================
